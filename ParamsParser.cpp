@@ -26,6 +26,11 @@ ParamsParser::ParamsParser(int argc, char **argv) {
                 exit(EXIT_FAILURE);
         }
     }
+
+    if (!empty(fileName) && !empty(interface)) {
+        fprintf(stderr, "Arguments -r and -i cannot be entered together!\n");
+        exit(EXIT_FAILURE);
+    }
     for (int i = t+1; i < argc; ++i) {
 
         /*********************************************************

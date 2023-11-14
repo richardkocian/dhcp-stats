@@ -103,11 +103,10 @@ void DHCPStats::startSniffing() {
         pcap = pcap_open_offline(paramsParser->getFile().c_str(), errbuf);
     } else {
         pcap = pcap_open_live(paramsParser->getInterface().c_str(), BUFSIZ, 1, 1000, errbuf);
-        if (pcap == nullptr) {
-            fprintf(stderr, "Couldn't open device %s: %s\n", paramsParser->getInterface().c_str(), errbuf);
-            exit(2);
-        }
-
+    }
+    if (pcap == nullptr) {
+        fprintf(stderr, "%s\n", errbuf);
+        exit(2);
     }
 
     struct pcap_pkthdr *header;
@@ -132,7 +131,6 @@ void DHCPStats::startSniffing() {
                     printOutput();
                 }
             }
-            i++;
         }
     }
 }

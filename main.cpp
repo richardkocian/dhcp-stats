@@ -11,7 +11,7 @@
 
 
 int main(int argc, char **argv) {
-    auto paramsParser = ParamsParser(argc, argv); //TODO když je zadán interface i file
+    auto paramsParser = ParamsParser(argc, argv);
     cout << "IP-Prefix Max-hosts Allocated addresses Utilization" << endl;
     auto dhcpStats = new DHCPStats(&paramsParser);
     dhcpStats->startSniffing();
