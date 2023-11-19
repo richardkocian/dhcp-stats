@@ -118,17 +118,27 @@ void DHCPStats::startSniffing() {
             continue;
         }
 
-        auto dhcp_data = (struct dhcp_packet *) (packet + sizeof(struct ether_header) + sizeof(struct ip) +
-                                                 sizeof(struct udphdr));
+        auto *ethernet = (struct ether_header *) (packet);
+        if (ntohs(ethernet->ether_type) == ETHERTYPE_IP) {
+            auto ip_header = (struct ip *) (packet + sizeof(struct ether_header));
+            if (ip_header->ip_p == IPPROTO_UDP) {
+                auto udp_header = (struct udphdr *) (packet + sizeof(struct ether_header) + sizeof(struct ip));
 
-        long long i = 0;
-        while (dhcp_data->options[i] != 255) {
-            if (dhcp_data->options[i] == 5) {
-                int ip = (dhcp_data->yiaddr[0] << 24) + (dhcp_data->yiaddr[1] << 16) + (dhcp_data->yiaddr[2] << 8) + (dhcp_data->yiaddr[3]);
+                if (ntohs(udp_header->uh_sport) == 67 && ntohs(udp_header->uh_dport) == 68) {
+                    auto dhcp_data = (struct dhcp_packet *) (packet + sizeof(struct ether_header) + sizeof(struct ip) +
+                                                             sizeof(struct udphdr));
+                    long long i = 0;
+                    while (dhcp_data->options[i] != 255) {
+                        if (dhcp_data->options[i] == 5) {
+                            int ip = (dhcp_data->yiaddr[0] << 24) + (dhcp_data->yiaddr[1] << 16) + (dhcp_data->yiaddr[2] << 8) + (dhcp_data->yiaddr[3]);
 
-                for (const auto &ip_range: getIPRanges()) {
-                    ip_range->is_IP_in_range(ip);
-                    printOutput();
+                            for (const auto &ip_range: getIPRanges()) {
+                                ip_range->is_IP_in_range(ip);
+                                printOutput();
+                            }
+                        }
+                        i++;
+                    }
                 }
             }
         }
