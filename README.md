@@ -25,7 +25,14 @@ There should be passed parameter -r or -i but not both together.
 
 Example run:
 
-    $ ./dhcp-stats -i en0 142.251.36.68/20
+    $ ./dhcp-stats -i eth0 192.168.1.0/24 192.168.0.0/22 172.16.32.0/24
+
+Example output:
+
+    $ IP-Prefix Max-hosts Allocated addresses Utilization
+    192.168.1.0/24 254 65 25.59%
+    192.168.0.0/22 1022 203 19.86%
+    172.16.32.0/24 254 30 11.81%
 
 ## List of submitted files:
 
@@ -38,3 +45,4 @@ Example run:
 * ParamsParser.h
 * manual.pdf
 * dhcp-stats.1
+* README.md
