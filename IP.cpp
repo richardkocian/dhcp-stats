@@ -8,6 +8,7 @@
 #include "IP.h"
 
 IP::IP(string ip) {
+    is_reported = false;
     int pos = ip.find("/");
     ip_addr_str = ip.substr(0, pos);
     ip_mask_str = ip.substr(pos + 1, ip.length());
@@ -92,4 +93,12 @@ int IP::get_max_address() {
 
 int IP::get_allocated_max_addresses() {
     return allocated_addresses;
+}
+
+bool IP::isReported() {
+    return is_reported;
+}
+
+void IP::setAsReported() {
+    is_reported = true;
 }

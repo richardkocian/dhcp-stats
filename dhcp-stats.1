@@ -1,0 +1,22 @@
+.TH DHCP-STATS 1
+.SH NAME
+dhcp-stats \- sniff dhcp packets and generate network prefixes usage statistics
+.SH SYNOPSIS
+.B dhcp-stats
+[\fB\-r\fR \fIfilename\fR]
+[\fB\-i\fR \fIinterface-name\fR]
+.IR ip-prefix
+[\f<ip-prefix\fR [ ... ]]
+.SH DESCRIPTION
+.B dhcp-stats
+generating network prefixes usage (that is passed in arguments) by sniffing ACK DHCP packets
+.SH OPTIONS
+.TP
+.BR \-i\fR
+Set the interface for sniffing packets when the file is not set.
+.TP
+.BR \-r\fR
+Set the file for sniffing packets when the interface is not set.
+.TP
+.BR \ip-prefix\fR
+Set the IPv4 prefixes from which the program will generate statics (xxx.xxx.xxx.xxx/xx).

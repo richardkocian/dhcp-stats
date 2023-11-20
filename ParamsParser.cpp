@@ -22,7 +22,7 @@ ParamsParser::ParamsParser(int argc, char **argv) {
                 interface = optarg;
                 break;
             default:
-                fprintf(stderr,"Unknown parameter!\n");
+                //fprintf(stderr,"Unknown parameter!\n");
                 exit(EXIT_FAILURE);
         }
     }
@@ -30,7 +30,13 @@ ParamsParser::ParamsParser(int argc, char **argv) {
     if (!empty(fileName) && !empty(interface)) {
         fprintf(stderr, "Arguments -r and -i cannot be entered together!\n");
         exit(EXIT_FAILURE);
+    } else {
+        if (empty(fileName) && empty(interface)) {
+            fprintf(stderr, "You have to enter -r or -i!\n");
+            exit(EXIT_FAILURE);
+        }
     }
+
     for (int i = t+1; i < argc; ++i) {
 
         /*********************************************************

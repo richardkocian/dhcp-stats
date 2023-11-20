@@ -1,6 +1,10 @@
-//
-// Created by Richard Kocián on 14.11.2023.
-//
+/**
+ * @file    DHCPStats.cpp
+ * @author  Richard Kocián (xkocia19)
+ *
+ * @brief   ISA Project - dhcp-stats
+ * @date    2023-12-14
+ */
 
 #include "DHCPStats.h"
 
@@ -22,7 +26,7 @@ void DHCPStats::initPrint() {
     }
 }
 
-double DHCPStats::printRow(IP* ip_range) {
+double DHCPStats::printRow(IP *ip_range) {
     double stats = ((double) ip_range->get_allocated_max_addresses() / (double) ip_range->get_max_address()) * 100;
     cout << ip_range->getIP_str() << " " << (int) ip_range->get_max_address() << " "
          << (int) ip_range->get_allocated_max_addresses() << " " << setprecision(4) << (double) stats << "%"
@@ -54,7 +58,10 @@ void DHCPStats::printOutput() {
     for (const auto &ip_range: ip_ranges) {
         double stats = printRow(ip_range);
         if (stats > 50) {
-            printToSysLog(ip_range->getIP_str());
+            if (!ip_range->isReported()) {
+                printToSysLog(ip_range->getIP_str());
+                ip_range->setAsReported();
+            }
         }
     }
 }
@@ -130,7 +137,8 @@ void DHCPStats::startSniffing() {
                     long long i = 0;
                     while (dhcp_data->options[i] != 255) {
                         if (dhcp_data->options[i] == 5) {
-                            int ip = (dhcp_data->yiaddr[0] << 24) + (dhcp_data->yiaddr[1] << 16) + (dhcp_data->yiaddr[2] << 8) + (dhcp_data->yiaddr[3]);
+                            int ip = (dhcp_data->yiaddr[0] << 24) + (dhcp_data->yiaddr[1] << 16) +
+                                     (dhcp_data->yiaddr[2] << 8) + (dhcp_data->yiaddr[3]);
 
                             for (const auto &ip_range: getIPRanges()) {
                                 ip_range->is_IP_in_range(ip);

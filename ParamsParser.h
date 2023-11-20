@@ -23,6 +23,12 @@ private:
     string interface;
     vector<string> ipAddresses;
 public:
+    /**
+     * @brief Parse program parameters and save them to private fields
+     *
+     * @param argc  Count of program parameters
+     * @param argv  Char array of program parameters
+     */
     ParamsParser(int argc, char **argv);
     string getFile();
     string getInterface();
